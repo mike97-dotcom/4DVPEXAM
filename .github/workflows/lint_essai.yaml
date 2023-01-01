@@ -1,0 +1,47 @@
+name: "Lint worflows"
+on:
+  pull_request:
+  push:
+  workflow_dispatch:
+jobs:
+  semgrep_job:
+    name: "semgrep"
+    container:
+      image: returntocorp/semgrep:1.1.0
+    runs-on: ubuntu-latest
+    if: (github.actor != 'dependabot[bot]')
+    steps:
+    - name: "Checkout source"
+      uses: actions/checkout@v3
+
+    - name: "Execute semgrep"
+      run: semgrep ci
+      env:
+       SEMGREP_RULES: p/default
+
+  docker_hadolint:
+   name: "Scan Docker"
+   runs-on: ubuntu-latest
+   steps:
+    - name: "Checkout "
+      uses: actions/checkout@v3
+
+    - name: "Executer Hadolint"
+      uses: hadolint/hadolint-action@v2.1.0
+      with:
+       dockerfile: ./Dockerfile
+  super_lint:
+    name: "Super lint"
+    runs-on: ubuntu-latest
+    
+    if: (github.event_name = 'pull_request')
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v3
+      
+      - name: 'Lint Code Base'
+        uses: github/super-linter/slim@v4
+        env:
+         VALIDATE_ALL_CODEBASE: true
+         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}    
+    
