@@ -3,7 +3,7 @@ on:
  push:
    tags:
     - "*"
-permissions:
+permissions: 
  contents: write
 jobs:
   release_workflow:
@@ -40,7 +40,7 @@ jobs:
         -  name: Build and push
            uses: docker/build-push-action@v3
            with:
-            push: true
+            push: true 
             tags: mike9697/exo.4dvp:${{github.ref_name}}
 
 
