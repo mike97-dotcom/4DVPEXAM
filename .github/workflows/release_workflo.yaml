@@ -26,9 +26,9 @@ jobs:
             args: release --rm-dist
           env:
            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        - name: "tag"
+        - name: "tag1"
           run: echo "${{github.ref_name}}"
         
         - name: "tag2"
-          run: echo "${{github.ref}}"
+          run: echo  "${{github.ref}}"
           
